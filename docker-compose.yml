@@ -1,0 +1,54 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    ports:
+      - "${WEB_HOST_PORT}:${WEB_CONTAINER_PORT}"
+    environment:
+      # nginx/conf.d/default.conf.templateで使用する環境変数
+      - WEB_PORT=${WEB_CONTAINER_PORT}
+      - FRONTEND_CONTAINER_PORT=${FRONTEND_CONTAINER_PORT}
+      - BACKEND_CONTAINER_PORT=${BACKEND_CONTAINER_PORT}
+    container_name: ssp_web_container
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
+    ports:
+      - "${FRONTEND_HOST_PORT}:${FRONTEND_CONTAINER_PORT}"
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /frontend
+        consistency: cached
+        # Volume Trickを利用してnode_modulesをホスト側から分離する
+      - type: volume
+        source: frontend_node_modules
+        target: /frontend/node_modules
+        # Next.jsのビルド成果物をホスト側から分離する
+      - type: volume
+        source: frontend_next
+        target: /frontend/.next
+    container_name: ssp_frontend_container
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    ports:
+      - "${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}"
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /backend
+        consistency: cached
+        # Volume Trickを利用してnode_modulesをホスト側から分離する
+      - type: volume
+        source: backend_node_modules
+        target: /backend/node_modules
+    container_name: ssp_backend_container
+
+volumes:
+  frontend_node_modules: {}
+  frontend_next: {}
+  backend_node_modules: {}

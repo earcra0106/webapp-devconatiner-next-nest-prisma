@@ -1,0 +1,22 @@
+{
+  "name": "ssp_web_proj_dev_container",
+  "dockerComposeFile": ["./docker-compose.devcontainer.yml"],
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "ubuntu",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // VSCode設定
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "docker.docker",
+        "GitHub.copilot-chat"
+      ]
+    }
+  },
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  }
+}

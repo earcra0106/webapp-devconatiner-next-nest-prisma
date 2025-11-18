@@ -1,0 +1,27 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # プロジェクトルート
+      - type: bind
+        source: ..
+        target: /workspace
+      # Volume Trickで除外
+      - type: volume
+        source: frontend_node_modules
+        target: /workspace/frontend/node_modules
+      - type: volume
+        source: frontend_next
+        target: /workspace/frontend/.next
+      - type: volume
+        source: backend_node_modules
+        target: /workspace/backend/node_modules
+    command: sleep infinity
+    tty: true
+
+volumes:
+  frontend_node_modules: {}
+  frontend_next: {}
+  backend_node_modules: {}
