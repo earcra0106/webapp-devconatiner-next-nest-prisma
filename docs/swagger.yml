@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: API ドキュメント
+  version: 1.0.0
+  description: トマトノート(仮)のAPIドキュメントです。
+servers:
+  - url: http://localhost:3000
+    description: ローカル開発サーバー
+paths:
+  /pages:
+    get:
+      summary: すべてのページを取得
+      responses:
+        '200':
+          description: ページのリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+    post:
+      summary: 新しいページを作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Page'
+      responses:
+        '201':
+          description: 作成されたページ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+  /pages/{id}:
+    get:
+      summary: 指定したIDのページを取得
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ページの詳細
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+    put:
+      summary: 指定したIDのページを更新
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Page'
+      responses:
+        '200':
+          description: 更新されたページ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+    delete:
+      summary: 指定したIDのページを削除
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ページが削除されました
+components:
+  schemas:
+    Page:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ページID
+        userid:
+          type: string
+          description: ユーザーID
+        name:
+          type: string
+          description: ページ名
+        content:
+          type: string
+          description: ページ内容
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+      required:
+        - id
+        - userid
+        - name
+        - content
+        - createdAt
+        - updatedAt

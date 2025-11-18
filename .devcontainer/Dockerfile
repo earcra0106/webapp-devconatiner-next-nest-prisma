@@ -1,4 +1,8 @@
-FROM ubuntu:24.04
+ARG DEVCONTAINER_UBUNTU_VERSION=latest
+
+FROM ubuntu:${DEVCONTAINER_UBUNTU_VERSION}
+
+ARG NODE_VERSION=latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -22,11 +26,13 @@ RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # nodeの使用バージョンをインストール
 RUN npm install -g n && \
-# なぜか環境変数の展開がうまくいかないため、直接バージョンを指定
-    n 24.11.1
+    n ${NODE_VERSION}
 
-# nestjs cliのインストール
-RUN npm install -g @nestjs/cli
+# ボリュームマウントする作業ディレクトリの作成
+RUN mkdir -p /workspace/frontend/node_modules && chown -R ubuntu:ubuntu /workspace/frontend/node_modules
+RUN mkdir -p /workspace/frontend/.next && chown -R ubuntu:ubuntu /workspace/frontend/.next
+RUN mkdir -p /workspace/backend/node_modules && chown -R ubuntu:ubuntu /workspace/backend/node_modules
+RUN mkdir -p /workspace/backend/dist && chown -R ubuntu:ubuntu /workspace/backend/dist
 
 USER ubuntu
 

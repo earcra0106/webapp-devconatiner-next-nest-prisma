@@ -1,17 +1,48 @@
-ARG NODE_VERSION
-ARG FRONTEND_CONTAINER_PORT
+ARG NODE_VERSION=latest
+ARG FRONTEND_CONTAINER_PORT=3000
 
-FROM node:24.11.1-alpine3.22
+# バージョンを設定
+FROM node:${NODE_VERSION}-alpine3.22 AS base
 
-WORKDIR /frontend
+# 依存関係のインストール
+FROM base AS dependency
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 
-COPY ./frontend /frontend
+COPY ./frontend/package*.json ./
+RUN npm ci
 
-RUN apk add --no-cache bash
+# アプリケーションのビルド
+FROM base AS builder
+WORKDIR /app
 
-RUN npm install && \
-    npm run build
+COPY --from=dependency /app/node_modules ./node_modules
+COPY ./frontend .
 
-EXPOSE 3000
+# RUN npx prisma generate
+RUN npm run build
 
-CMD ["npm", "run", "start"]
+# 本番環境用イメージの作成
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE ${FRONTEND_CONTAINER_PORT}
+
+ENV PORT ${FRONTEND_CONTAINER_PORT}
+
+CMD HOSTNAME="0.0.0.0" node server.js

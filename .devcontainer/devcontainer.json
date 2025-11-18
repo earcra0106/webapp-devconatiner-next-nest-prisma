@@ -12,7 +12,8 @@
       "extensions": [
         "ms-azuretools.vscode-docker",
         "docker.docker",
-        "GitHub.copilot-chat"
+        "GitHub.copilot-chat",
+        "arjun.swagger-viewer"
       ]
     }
   },

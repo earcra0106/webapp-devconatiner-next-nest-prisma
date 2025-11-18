@@ -1,19 +1,32 @@
-ARG NODE_VERSION
-ARG BACKEND_CONTAINER_PORT
+ARG NODE_VERSION=latest
+ARG BACKEND_CONTAINER_PORT=8000
 
-FROM node:24.11.1-alpine3.22
+# バージョンを設定
+FROM node:${NODE_VERSION}-alpine3.22 AS base
 
-WORKDIR /backend
+# 依存関係のインストール
+FROM base AS dependency
+WORKDIR /app
+COPY ./backend/package*.json ./
+RUN npm ci --only=production
 
-COPY ./backend /backend
-
-RUN apk add --no-cache bash
-
-RUN npm install --production
-
-# エラー吐いた (sh: nest: not found)
+# アプリケーションのビルド
+FROM base AS builder
+WORKDIR /app
+COPY ./backend/package*.json ./
+RUN npm ci --only=production
+RUN npm i -g @nestjs/cli
+COPY ./backend .
 RUN npm run build
 
-EXPOSE 8000
+# 本番環境用イメージの作成
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV production
+COPY --from=builder /app/dist ./dist
+COPY --from=dependency /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
-CMD ["npm", "run", "start:prod"]
+EXPOSE ${BACKEND_CONTAINER_PORT}
+
+CMD [ "npm", "run", "start:prod" ]
