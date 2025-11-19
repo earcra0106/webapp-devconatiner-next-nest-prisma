@@ -4,8 +4,19 @@ server {
 
     root /var/www/public;
 
+    # Next.js (フロントエンド) へのプロキシ
     location / {
         proxy_pass http://frontend:${FRONTEND_CONTAINER_PORT};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # API (バックエンド) へのプロキシ
+    location /api/ {
+        proxy_pass http://backend:${BACKEND_CONTAINER_PORT}/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

@@ -8,3 +8,45 @@
 ## 20251118 14:00
 
 開発環境が完成。プロキシサーバーの整備は未完成のため、本番環境で動かすのはまだ。
+
+## 20251119 4:23
+
+プロダクションのインフラが汲めていないので、nginx の設定を要編集。
+
+以下のプロダクションビルド中エラーに対応する。
+
+```
+ => ERROR [backend builder 6/6] RUN npm run build                                                  5.2s
+------
+ > [backend builder 6/6] RUN npm run build:
+0.732
+0.732 > backend@0.0.1 build
+0.732 > nest build
+0.732
+4.948 src/main.ts:6:20 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+4.948
+4.948 6   await app.listen(process.env.PORT ?? 8000);
+4.948                      ~~~~~~~
+4.948
+4.948 Found 1 error(s).
+4.948
+------
+Dockerfile:20
+
+--------------------
+
+  18 |     RUN npm i -g @nestjs/cli
+
+  19 |     COPY ./backend .
+
+  20 | >>> RUN npm run build
+
+  21 |
+
+  22 |     # 本番環境用イメージの作成
+
+--------------------
+
+target backend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+
+```

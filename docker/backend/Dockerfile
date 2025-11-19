@@ -7,14 +7,17 @@ FROM node:${NODE_VERSION}-alpine3.22 AS base
 # 依存関係のインストール
 FROM base AS dependency
 WORKDIR /app
+
 COPY ./backend/package*.json ./
 RUN npm ci --only=production
 
 # アプリケーションのビルド
 FROM base AS builder
 WORKDIR /app
+
 COPY ./backend/package*.json ./
 RUN npm ci --only=production
+RUN npm install --save-dev @types/node
 RUN npm i -g @nestjs/cli
 COPY ./backend .
 RUN npm run build

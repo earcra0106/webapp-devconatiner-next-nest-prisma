@@ -1,5 +1,6 @@
 export default async function TestPage() {
-  const res = await fetch("http://localhost:8000/hello", {
+  const apiUrl = process.env.API_URL_SERVER; // 環境変数からAPIのURLを取得
+  const res = await fetch(`${apiUrl}/hello`, {
     cache: "no-store",
   });
   const data = await res.json();

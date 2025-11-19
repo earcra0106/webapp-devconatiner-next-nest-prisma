@@ -18,8 +18,6 @@ services:
       args:
         NODE_VERSION: ${NODE_VERSION}
         FRONTEND_CONTAINER_PORT: ${FRONTEND_CONTAINER_PORT}
-    ports:
-      - "${FRONTEND_HOST_PORT}:${FRONTEND_CONTAINER_PORT}"
     container_name: ssp_frontend_container
   backend:
     build:
@@ -28,6 +26,4 @@ services:
       args:
         NODE_VERSION: ${NODE_VERSION}
         BACKEND_CONTAINER_PORT: ${BACKEND_CONTAINER_PORT}
-    ports:
-      - "${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}"
     container_name: ssp_backend_container
