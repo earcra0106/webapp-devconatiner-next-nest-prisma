@@ -50,3 +50,28 @@ Dockerfile:20
 target backend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
 
 ```
+
+## 20251119 12:26
+
+本番環境も動くようになった。
+MySQLの整備を行う。これが終わったら開発できるぜ！
+devはコンテナの中にそのままインストールする。
+本番環境はcomposeにdbコンテナを含める。
+
+
+prisma環境構築
+https://tech-lab.sios.jp/archives/45377
+
+```bash
+cd backend
+
+npm install prisma --save-dev
+
+# npx prisma init
+
+npm i --save @nestjs/config
+
+npx prisma migrate dev --name init
+
+npx prisma studio
+```
