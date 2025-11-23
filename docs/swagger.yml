@@ -7,110 +7,150 @@ servers:
   - url: http://localhost:3000
     description: ローカル開発サーバー
 paths:
-  /pages:
-    get:
-      summary: すべてのページを取得
-      responses:
-        '200':
-          description: ページのリスト
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Page'
+  /auth/register:
     post:
-      summary: 新しいページを作成
+      summary: ユーザー登録
+      description: 新しいユーザーアカウントを作成します。
+      tags:
+        - 認証
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Page'
+              type: object
+              required: [email, password, name]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "password123"
+                name:
+                  type: string
+                  example: "Taro Kono"
       responses:
         '201':
-          description: 作成されたページ
+          description: ユーザーが正常に作成されました。
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Page'
-  /pages/{id}:
-    get:
-      summary: 指定したIDのページを取得
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ページの詳細
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Page'
-    put:
-      summary: 指定したIDのページを更新
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "01J8Z340P3TYJQAXTF8D9X5N2X"
+                  email:
+                    type: string
+                    example: "user@example.com"
+                  name:
+                    type: string
+                    example: "Taro Kono"
+        '400':
+          description: リクエストのペイロードが無効です。
+        '409':
+          description: メールアドレスが既に存在します。
+
+  /auth/login:
+    post:
+      summary: ユーザーログイン
+      description: ユーザーを認証し、セッションまたはJWTトークンを作成します。
+      tags:
+        - 認証
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Page'
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "password123"
       responses:
         '200':
-          description: 更新されたページ
+          description: ログイン成功
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Page'
-    delete:
-      summary: 指定したIDのページを削除
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "01J8Z340P3TYJQAXTF8D9X5N2X"
+                      email:
+                        type: string
+                        example: "user@example.com"
+                      name:
+                        type: string
+                        example: "Taro Kono"
+        '401':
+          description: メールアドレスまたはパスワードが無効です。
+
+  /auth/logout:
+    post:
+      summary: ログアウト
+      description: 現在のセッションまたはトークンを無効にします。
+      tags:
+        - 認証
       responses:
-        '204':
-          description: ページが削除されました
+        '200':
+          description: ログアウト成功。
+        '401':
+          description: 認証されていません。
+
+  /auth/me:
+    get:
+      summary: 現在認証されているユーザー情報の取得
+      description: 提供されたトークンに関連付けられたユーザーを返します。
+      tags:
+        - 認証
+      responses:
+        '200':
+          description: 現在のユーザー情報
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "01J8Z340P3TYJQAXTF8D9X5N2X"
+                  email:
+                    type: string
+                    example: "user@example.com"
+                  name:
+                    type: string
+                    example: "Taro Kono"
+        '401':
+          description: 認証されていません。
 components:
   schemas:
-    Page:
+    User:
       type: object
       properties:
         id:
           type: string
-          description: ページID
-        userid:
+          example: "01J8Z340P3TYJQAXTF8D9X5N2X"
+        email:
           type: string
-          description: ユーザーID
+          example: "user@example.com"
         name:
           type: string
-          description: ページ名
-        content:
+          example: "Taro Kono"
+        password:
           type: string
-          description: ページ内容
-        createdAt:
-          type: string
-          format: date-time
-          description: 作成日時
-        updatedAt:
-          type: string
-          format: date-time
-          description: 更新日時
-      required:
-        - id
-        - userid
-        - name
-        - content
-        - createdAt
-        - updatedAt
+          example: "hashed_password"
