@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { prisma } from '../lib/prisma.js';
+import { User } from 'generated/prisma/client.js';
 
 @Injectable()
 export class AppService {
@@ -7,13 +8,13 @@ export class AppService {
     return 'Hello World!';
   }
 
-  getHelloEndPoint(): object {
+  getHelloEndPoint(): { message: string } {
     return {
       message: 'Hello World!'
     };
   }
 
-  getTestSeedData(): object {
+  async getTestSeedData(): Promise<User[]> {
     return prisma.user.findMany({
       include: {
         posts: true,

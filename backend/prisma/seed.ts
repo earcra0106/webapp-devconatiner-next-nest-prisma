@@ -1,5 +1,9 @@
-import { prisma } from '../lib/prisma';
+import { prisma } from '../lib/prisma.js';
 async function main() {
+  // Clear existing data
+  await prisma.post.deleteMany();
+  await prisma.user.deleteMany();
+
   const alice = await prisma.user.upsert({
     where: { email: 'alice@prisma.io' },
     update: {},

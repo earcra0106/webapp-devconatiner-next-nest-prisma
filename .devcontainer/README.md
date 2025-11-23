@@ -7,7 +7,7 @@ cd frontend && npm install && npm run dev
 
 ## バックエンド
 ```bash
-cd backend
+cd backend && npm install && npx prisma studio --port 5555 && npm run start:dev
 ```
 
 ### 環境変数
@@ -249,4 +249,11 @@ Next.js+PrismaのPrismaのSeed実行時に他のファイルを読み込まな�
 https://zenn.dev/kyokasuigetu/articles/34da763544ba6a
 
 https://qiita.com/to3izo/items/9be3c419c9b66e131565
+
 https://zenn.dev/ot_offcial/articles/6933b5e8be3091
+
+Nest.js で start:prod 実行時に Error: Cannot find module 'dist/main' と表示される
+https://zenn.dev/cykinso/articles/3c7d590ca1dab1
+
+Prisma Migrate: Docker を使用した移行のデプロイ
+https://notiz.dev/blog/prisma-migrate-deploy-with-docker

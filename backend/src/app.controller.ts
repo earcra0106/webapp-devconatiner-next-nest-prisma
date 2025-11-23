@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service.js';
+import { User } from 'generated/prisma/client.js';
 
 @Controller()
 export class AppController {
@@ -11,12 +12,15 @@ export class AppController {
   }
 
   @Get('hello')
-  getHelloEndPoint(): object {
+  getHelloEndPoint(): { message: string } {
     return this.appService.getHelloEndPoint();
   }
 
   @Get('test')
-  getTestSeedData(): object {
-    return this.appService.getTestSeedData();
+  async getTestSeedData(): Promise<{ data: User[] }> {
+    const data = await this.appService.getTestSeedData();
+    return {
+      data: data
+    };
   }
 }

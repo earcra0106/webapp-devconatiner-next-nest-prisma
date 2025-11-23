@@ -26,10 +26,13 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV production
+
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma/schema.prisma ./dist/prisma/schema.prisma
+COPY --from=builder /app/prisma/migrations ./dist/prisma/migrations
 COPY --from=dependency /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 EXPOSE ${BACKEND_CONTAINER_PORT}
 
-CMD [ "npm", "run", "start:prod" ]
+CMD [ "npm", "run", "start:migrate:seed:prod" ]
