@@ -5,10 +5,17 @@ export default async function TestPage() {
   });
   const data = await res.json();
 
+  const resTest = await fetch(`${apiUrl}/test`, {
+    cache: "no-store",
+  });
+  const dataTest = await resTest.json();
+
   return (
     <div>
       <h1>API Response</h1>
       <pre>{JSON.stringify(data, null, 2)}</pre>
+      <h1>Test API Response</h1>
+      <pre>{JSON.stringify(dataTest, null, 2)}</pre>
     </div>
   );
 }

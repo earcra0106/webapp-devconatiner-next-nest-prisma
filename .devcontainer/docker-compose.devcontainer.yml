@@ -18,6 +18,8 @@ services:
       - type: bind
         source: ..
         target: /workspace
+    environment:
+      TZ: "Asia/Tokyo"
     command: sleep infinity
     tty: true
   db:

@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService } from './app.service.js';
 
 @Controller()
 export class AppController {
@@ -12,6 +12,11 @@ export class AppController {
 
   @Get('hello')
   getHelloEndPoint(): object {
-    return { message: 'Hello World!' };
+    return this.appService.getHelloEndPoint();
+  }
+
+  @Get('test')
+  getTestSeedData(): object {
+    return this.appService.getTestSeedData();
   }
 }

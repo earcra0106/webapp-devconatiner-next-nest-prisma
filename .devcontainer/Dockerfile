@@ -28,7 +28,7 @@ RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN npm install -g n && \
     n ${NODE_VERSION}
 
-# ボリュームマウントする作業ディレクトリの作成
+# 自動生成される作業ディレクトリをあらかじめ作成
 RUN mkdir -p /workspace/frontend/node_modules && chown -R ubuntu:ubuntu /workspace/frontend/node_modules
 RUN mkdir -p /workspace/frontend/.next && chown -R ubuntu:ubuntu /workspace/frontend/.next
 RUN mkdir -p /workspace/backend/node_modules && chown -R ubuntu:ubuntu /workspace/backend/node_modules
