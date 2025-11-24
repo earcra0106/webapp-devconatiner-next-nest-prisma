@@ -75,3 +75,11 @@ npx prisma migrate dev --name init
 
 npx prisma studio
 ```
+
+## 20251124 18:32
+touch src/domain/pomodoro-note-stat/dto/create-pomodoro-note-stat.dto.ts && \
+touch src/domain/pomodoro-note-stat/dto/update-pomodoro-note-stat.dto.ts && \
+touch src/domain/pomodoro-note-stat/pomodoro-note-stat.repository.ts && \
+touch src/domain/pomodoro-note-stat/pomodoro-note-stat.service.ts && \
+touch src/domain/pomodoro-note-stat/pomodoro-note-stat.controller.ts && \
+touch src/domain/pomodoro-note-stat/pomodoro-note-stat.module.ts

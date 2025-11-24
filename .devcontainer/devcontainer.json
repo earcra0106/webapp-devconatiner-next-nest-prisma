@@ -1,6 +1,8 @@
 {
   "name": "ssp_web_proj_dev_container",
-  "dockerComposeFile": ["./docker-compose.devcontainer.yml"],
+  "dockerComposeFile": [
+    "./docker-compose.devcontainer.yml"
+  ],
   "service": "devcontainer",
   "workspaceFolder": "/workspace",
   "remoteUser": "ubuntu",
@@ -8,13 +10,16 @@
     "vscode": {
       "settings": {
         // VSCode設定
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
       },
       "extensions": [
         "ms-azuretools.vscode-docker",
         "docker.docker",
         "GitHub.copilot-chat",
         "arjun.swagger-viewer",
-        "Prisma.prisma"
+        "Prisma.prisma",
+        "esbenp.prettier-vscode"
       ]
     }
   },

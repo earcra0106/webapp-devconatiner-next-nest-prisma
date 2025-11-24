@@ -17,7 +17,7 @@ export class AppService {
   async getTestSeedData(): Promise<User[]> {
     return prisma.user.findMany({
       include: {
-        posts: true,
+        notes: true,
       },
     });
   }
