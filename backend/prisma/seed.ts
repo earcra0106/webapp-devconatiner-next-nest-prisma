@@ -1,7 +1,9 @@
 import { prisma } from '../lib/prisma.js';
 async function main() {
   // Clear existing data
-  await prisma.post.deleteMany();
+  await prisma.pomodoroNoteStat.deleteMany();
+  await prisma.pomodoroSession.deleteMany();
+  await prisma.note.deleteMany();
   await prisma.user.deleteMany();
 
   const alice = await prisma.user.upsert({
@@ -10,38 +12,72 @@ async function main() {
     create: {
       email: 'alice@prisma.io',
       name: 'Alice',
-      posts: {
-        create: {
-          title: 'Check out Prisma with Next.js',
-          content: 'https://www.prisma.io/nextjs',
-          published: true,
-        },
+      password: 'alicepassword',
+      notes: {
+        
       },
     },
-  })
+  });
+
+  const aliceNote1 = await prisma.note.create({
+    data: {
+      authorId: alice.id,
+      title: 'note1',
+      content: 'content1',
+    },
+  });
+
+  const aliceNote2 = await prisma.note.create({
+    data: {
+      authorId: alice.id,
+      title: 'note2',
+      content: 'content2',
+    },
+  });
+
+  const alicePomodoroSession1 = await prisma.pomodoroSession.create({
+    data: {
+      userId: alice.id,
+      duration: 25,
+      startedAt: new Date(),
+      endedAt: new Date(new Date().getTime() + 25 * 60000),
+      charaCount: 1000,
+      pomodoroNoteStats: {
+        create: [
+          {
+            noteId: aliceNote1.id,
+            charaCount: 600,
+          },
+          {
+            noteId: aliceNote2.id,
+            charaCount: 400,
+          },
+        ],
+      },
+    },
+  });
+
   const bob = await prisma.user.upsert({
     where: { email: 'bob@prisma.io' },
     update: {},
     create: {
       email: 'bob@prisma.io',
       name: 'Bob',
-      posts: {
+      password: 'bobpassword',
+      notes: {
         create: [
           {
-            title: 'Follow Prisma on Twitter',
-            content: 'https://twitter.com/prisma',
-            published: true,
+            title: 'ノート1',
+            content: '本文1',
           },
           {
-            title: 'Follow Nexus on Twitter',
-            content: 'https://twitter.com/nexusgql',
-            published: true,
+            title: 'ノート2',
+            content: '本文2',
           },
         ],
       },
     },
-  })
-  console.log({ alice, bob })
+  });
 }
 main()
   .then(async () => {

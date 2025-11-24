@@ -8,17 +8,47 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
+  id    String     @id @default(ulid())
   email String  @unique
   name  String?
-  posts Post[]
+  password String
+  notes Note[]
+  pomodoroSessions PomodoroSession[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
+model Note {
+  id        String     @id @default(ulid())
+  title     String  @default("Untitled")
   content   String?
-  published Boolean @default(false)
+  authorId  String
   author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+  pomodoroStats PomodoroNoteStat[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PomodoroSession {
+  id        String     @id @default(ulid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  duration  Int      // Duration in minutes
+  startedAt DateTime
+  endedAt   DateTime?
+  charaCount Int      @default(0)
+  pomodoroNoteStats PomodoroNoteStat[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PomodoroNoteStat {
+  pomodoroSessionId String // ポモドーロセッションID (外部キー・複合主キー)
+  noteId            String // ノートID (外部キー・複合主キー)
+  charaCount        Int              @default(0) // ノートごとの文字数
+  pomodoroSession   PomodoroSession  @relation(fields: [pomodoroSessionId], references: [id])
+  note              Note             @relation(fields: [noteId], references: [id])
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  @@id([pomodoroSessionId, noteId])
 }
