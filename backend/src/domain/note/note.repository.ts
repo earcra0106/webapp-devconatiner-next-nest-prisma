@@ -32,6 +32,21 @@ export class NoteRepository {
     });
   }
 
+  async findTitlesByAuthorId(authorId: string): Promise<Pick<Note, 'id' | 'title'>[]> {
+    return prisma.note.findMany({
+      where: { authorId },
+      select: { id: true, title: true },
+      orderBy: { id: 'desc' },
+    });
+  }
+
+  async findContentById(id: string): Promise<Pick<Note, 'id' | 'content'> | null> {
+    return prisma.note.findUnique({
+      where: { id },
+      select: { id: true, content: true },
+    });
+  }
+
   async update(id: string, data: UpdateNoteDto): Promise<Note> {
     return prisma.note.update({
       where: { id },

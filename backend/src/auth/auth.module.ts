@@ -5,7 +5,7 @@ import { AuthService } from './auth.service.js';
 import { AuthController } from './auth.controller.js';
 import { LocalStrategy } from './local.strategy.js';
 import { JwtStrategy } from './jwt.strategy.js';
-import { UserService } from '../domain/user/user.service.js';
+import { UserModule } from '../domain/user/user.module.js';
 
 @Module({
   imports: [
@@ -14,8 +14,9 @@ import { UserService } from '../domain/user/user.service.js';
       secret: process.env.JWT_SECRET ?? 'change-me',
       signOptions: { expiresIn: '1h' },
     }),
+    UserModule,
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, UserService],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

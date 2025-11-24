@@ -83,3 +83,8 @@ touch src/domain/pomodoro-note-stat/pomodoro-note-stat.repository.ts && \
 touch src/domain/pomodoro-note-stat/pomodoro-note-stat.service.ts && \
 touch src/domain/pomodoro-note-stat/pomodoro-note-stat.controller.ts && \
 touch src/domain/pomodoro-note-stat/pomodoro-note-stat.module.ts
+
+## 20251125 7:53
+シードデータを消そうとしてもできないみたい。
+ノートに紐づいているポモドーロ統計データがあると、ノートを消せない。
+APIを改善して、ノートを消すときに紐づいているポモドーロ統計データも一緒に消すようにする必要があるが、時間がかかりそうなので後回しにする。

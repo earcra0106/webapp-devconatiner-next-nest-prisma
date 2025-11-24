@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard.js';
 import { PomodoroNoteStatService } from './pomodoro-note-stat.service.js';
 import type { CreatePomodoroNoteStatDto } from './dto/create-pomodoro-note-stat.dto.js';
 import type { UpdatePomodoroNoteStatDto } from './dto/update-pomodoro-note-stat.dto.js';
 
+@UseGuards(JwtAuthGuard)
 @Controller('pomodoro-note-stats')
 export class PomodoroNoteStatController {
   constructor(private readonly service: PomodoroNoteStatService) {}
