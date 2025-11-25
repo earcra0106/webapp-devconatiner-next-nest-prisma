@@ -1,36 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# frontend
 
-## Getting Started
+このディレクトリには、フロントエンドアプリケーションのソースコードが含まれています。
 
-First, run the development server:
+## 概要
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Next.jsを使用して構築されており、ReactとTailwind CSSを利用しています。APIを通じてバックエンドと連携し、ユーザーインターフェースを提供します。従来のWebサイトとは異なり、SPA（Single Page Application）として動作し、クライアントサイドでの高速なページ遷移と動的なコンテンツ更新を実現しています。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 簡単な説明
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.jsは、Reactベースのフレームワークであり、サーバーサイドレンダリング（SSR）や静的サイト生成（SSG）をサポートしています。これにより、パフォーマンスの向上とSEO対策が可能となります。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+今回はバックエンド開発が主題であるため、フロントエンドはAIを活用し、最小限の実装で構築しました。今後改善するならば、関数の分割、App Routerを活用したページ構成の見直しが考えられます。
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+特に大きな問題点は、App Routerを活用できておらず、サーバーサイドレンダリングの恩恵を受けられていないことです。現在はクライアントサイドでのみレンダリングが行われており、Next.jsの利点が十分に活かされていません。  
+サーバーサイドレンダリングとは、サーバー側で一部のHTMLを生成し、クライアントに送信する手法です。これにより、初回のページロードが高速化される他、SEOの向上にも寄与します。対して、クライアントサイドレンダリングは、ブラウザがJavaScriptを実行してコンテンツを生成するため、初回ロードが遅くなる可能性があります。  
+このプロジェクトは、noteの取得などをfetchで行っており、クライアントサイドレンダリングに依存しています。App Routerを活用すれば、URLを基にサーバーサイドでデータを取得し、初回ロード時にHTMLを生成することが可能であるため、パフォーマンスの向上が期待できます。
