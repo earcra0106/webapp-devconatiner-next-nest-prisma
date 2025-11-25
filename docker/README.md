@@ -1,13 +1,26 @@
-# /docker フォルダ
+# docker
 
-このフォルダには、 **アプリケーション** の実行環境を定義する Dockerfile が格納されます。
+このディレクトリには、Docker を使用してアプリケーションの本番環境を構築およびデプロイするための設定ファイルが含まれています。
 
-アプリをビルドする場合は `docker compose up` をプロジェクトルートで実行してください。
-ビルド後は [http://localhost:8080/](http://localhost:8080/) でアプリを開けます。
+## 概要
 
-なお開発環境は [devcontainer.json](../.devcontainer/devcontainer.json) で定義されているため、このフォルダは直接関係ありません。
+Docker Compose を使用して、バックエンドとフロントエンドのサービスを定義および管理します。各サービスは独自の Dockerfile を持ち、必要な依存関係と設定が含まれています。
 
-参考
+Docker Composeは、複数のコンテナを一括で管理できるツールです。
+その設定ファイルは [docker-compose.yml](../docker-compose.yml) に記述されています。コンテナの構成は以下の通りです。
 
-- frontend のビルド
-  - [Next.js アプリケーションのイメージサイズを劇的に削減するマルチステージビルドの魔法 #Docker - Qiita](https://qiita.com/s_sei/items/9019cd2ad9c30f4201a7)
+- **backend**: NestJS アプリケーションを実行するコンテナ。Prisma ORM を使用してデータベースと連携します。
+- **frontend**: Next.js アプリケーションを実行するコンテナ。
+- **db**: PostgreSQL データベースを実行するコンテナ。
+- **web**: Nginx を使用してフロントエンドアプリケーションを配信するコンテナ。
+
+frontend及びbackendは直接ポートを公開せず、Nginx経由でアクセスします。このようなnginxの使い方は、サーバの通信を代替することからリバースプロキシと呼ばれます。  
+これにより、本来 `localhost:3000` でアクセスするフロントエンドアプリケーションは、 `localhost:8080` からアクセスでき、バックエンドAPIも `localhost:8080/api` からアクセス可能となります。  
+このような構成のメリットは、外部からの直接アクセスを防ぎ、セキュリティとパフォーマンスを向上させることができる点です。大規模なアプリケーションでは、Nginxが負荷分散やキャッシュ機能を提供することで、全体の効率を高めることができます。
+なおこのような構成は本番環境向けであり、開発環境では直接各サーバにアクセスすることが一般的です。
+リバースプロキシとしてのルーティング設定は [nginx/default.conf](./web/configs/default.conf.template) に記述されています。
+
+## 参考
+
+frontend のビルドのため参照  
+[Next.js アプリケーションのイメージサイズを劇的に削減するマルチステージビルドの魔法 #Docker - Qiita](https://qiita.com/s_sei/items/9019cd2ad9c30f4201a7)
