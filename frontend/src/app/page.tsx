@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, FormEvent } from 'react';
 import Image from 'next/image';
 import LoginForm from '../components/LoginForm';
 import NotesList from '../components/NotesList';
+import PomodoroTimer from '../components/PomodoroTimer';
 import { loginRequest, fetchNoteTitlesRequest, Note } from '../lib/api';
 import { decodeJwt } from '../lib/jwt';
 
@@ -121,6 +122,8 @@ export default function Home() {
             />
           </div>
         </main>
+        
+        <PomodoroTimer workMinutes={25} breakMinutes={5} />
       </div>
       )}
     </>
