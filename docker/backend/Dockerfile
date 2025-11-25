@@ -20,6 +20,14 @@ RUN npm ci --only=production
 RUN npm install --save-dev @types/node
 RUN npm i -g @nestjs/cli
 COPY ./backend .
+
+# 自動生成物が存在する場合は削除して、クリーンな状態で生成を行う
+RUN rm -rf ./generated
+
+# Prisma Clientの生成
+RUN npx prisma generate
+
+# アプリケーションのビルド
 RUN npm run build
 
 # 本番環境用イメージの作成
